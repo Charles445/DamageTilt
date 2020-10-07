@@ -8,11 +8,12 @@ public class YawUtil
 	
 	public static float getAttackedAtYaw(LivingEntity entity)
 	{
-		return entity.field_6271;
+		//I don't think "knockbackVelocity" is the right name for this...
+		return entity.knockbackVelocity;
 	}
 	
 	public static void setAttackedAtYaw(LivingEntity entity, float attackedAtYaw)
 	{
-		entity.field_6271 = attackedAtYaw;
+		entity.knockbackVelocity = attackedAtYaw;
 	}
 }
