@@ -1,0 +1,16 @@
+[
+{
+  "modid": "damagetilt",
+  "name": "Damage Tilt",
+  "description": "Tilts the player's camera when they take damage",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Charles445"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
