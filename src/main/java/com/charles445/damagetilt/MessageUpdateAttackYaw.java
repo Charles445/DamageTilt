@@ -1,61 +1,62 @@
 package com.charles445.damagetilt;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.function.Supplier;
 
-public class MessageUpdateAttackYaw implements IMessage
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
+
+public class MessageUpdateAttackYaw
 {
-	private float attackedAtYaw;
+	public float attackedAtYaw;
 	
 	public MessageUpdateAttackYaw()
 	{
 		
 	}
 	
-	public MessageUpdateAttackYaw(EntityLivingBase entity)
+	public MessageUpdateAttackYaw(float value)
+	{
+		this.attackedAtYaw = value;
+	}
+	
+	public MessageUpdateAttackYaw(LivingEntity entity)
 	{
 		this.attackedAtYaw = entity.attackedAtYaw;
 	}
 	
-	@Override
-	public void fromBytes(ByteBuf buf)
+	public static MessageUpdateAttackYaw encode(MessageUpdateAttackYaw message, PacketBuffer packet)
 	{
-		this.attackedAtYaw = buf.readFloat();
+		packet.writeFloat(message.attackedAtYaw);
+		return message;
 	}
 	
-	@Override
-	public void toBytes(ByteBuf buf)
+	public static MessageUpdateAttackYaw decode(PacketBuffer packet)
 	{
-		buf.writeFloat(this.attackedAtYaw);
+		return new MessageUpdateAttackYaw(packet.readFloat());
 	}
 	
-	public static class Handler implements IMessageHandler<MessageUpdateAttackYaw, IMessage>
+	public static void handle(MessageUpdateAttackYaw message, Supplier<NetworkEvent.Context> ctx)
 	{
-		@Override
-		public IMessage onMessage(MessageUpdateAttackYaw message, MessageContext ctx) 
-		{
-			if(ctx.side == Side.CLIENT)
-			{
-				Minecraft.getMinecraft().addScheduledTask(() -> 
-				{
-					fromMessage(message);
-				});
-			}
-			return null;
-		}
+		ctx.get().setPacketHandled(true);
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
+			return;
 		
-		@SideOnly(Side.CLIENT)
-		public static void fromMessage(MessageUpdateAttackYaw message)
+		Minecraft.getInstance().deferTask(() -> 
 		{
-			if (!ModConfig.damageTiltEnabled)
-				return;
-			Minecraft.getMinecraft().player.attackedAtYaw = message.attackedAtYaw;
-		}
+			fromMessage(message);
+		});
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	public static void fromMessage(MessageUpdateAttackYaw message)
+	{
+		if (!TiltConfig.damageTiltEnabled)
+			return;
+		Minecraft.getInstance().player.attackedAtYaw = message.attackedAtYaw;
 	}
 }

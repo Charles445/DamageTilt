@@ -1,15 +1,21 @@
 package com.charles445.damagetilt;
 
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class PacketHandler
 {
-	public static final SimpleNetworkWrapper instance = NetworkRegistry.INSTANCE.newSimpleChannel(DamageTilt.MODID);
+	private static final String PROTOCOL_VERSION = "1";
+	public static final SimpleChannel instance = NetworkRegistry.newSimpleChannel(
+			new ResourceLocation(DamageTilt.MODID, "main"),
+			() -> PROTOCOL_VERSION,
+			PROTOCOL_VERSION::equals,
+			PROTOCOL_VERSION::equals
+	);
 	
 	public static void init()
 	{
-		instance.registerMessage(MessageUpdateAttackYaw.Handler.class, MessageUpdateAttackYaw.class, 0, Side.CLIENT);
+		instance.registerMessage(0, MessageUpdateAttackYaw.class, MessageUpdateAttackYaw::encode, MessageUpdateAttackYaw::decode, MessageUpdateAttackYaw::handle);
 	}
 }
