@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[29,)"
+loaderVersion="[32,)"
 license="MIT"
 
 [[mods]]
@@ -14,13 +14,13 @@ Tilts the player's camera when they take damage
 [[dependencies.damagetilt]]
 modId="forge"
 mandatory=true
-versionRange="[29,)"
+versionRange="[32,)"
 ordering="NONE"
 side="BOTH"
    
 [[dependencies.damagetilt]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.15, 1.16)"
+versionRange="[1.16, 1.17)"
 ordering="NONE"
 side="BOTH"
