@@ -2,13 +2,12 @@ package com.charles445.damagetilt;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.PacketByteBuf;
+import net.minecraft.network.PacketByteBuf;
 
 public class KnockbackHandler
 {
-	public static void onKnockback(Object entity, Entity attacker, float f, double d, double e)
+	public static void onKnockback(Object entity, float f, double d, double e)
 	{
 		if(entity instanceof PlayerEntity)
 		{
