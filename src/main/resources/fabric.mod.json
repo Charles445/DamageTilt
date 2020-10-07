@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "modid",
+  "version": "${version}",
+
+  "name": "Damage Tilt",
+  "description": "Tilts the player's camera when they take damage",
+  "authors": [
+    "Charles445"
+  ],
+  "contact": {},
+
+  "license": "MIT",
+  "icon": "assets/damagetilt/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.charles445.damagetilt.DamageTilt"
+    ],
+	"client": [
+      "com.charles445.damagetilt.DamageTiltClient"
+    ]
+  },
+  "mixins": [
+    "damagetilt.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

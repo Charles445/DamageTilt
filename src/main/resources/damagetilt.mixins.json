@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.6",
+  "package": "com.charles445.damagetilt.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+	"KnockbackMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
