@@ -33,7 +33,21 @@ public class EventHandler
 				return;
 			
 			//Server Side
-			PacketHandler.instance.sendTo(new MessageUpdateAttackYaw(player), ((ServerPlayerEntity)player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+			
+			if(player instanceof ServerPlayerEntity)
+			{
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
+				
+				//Check if the connection is null, which may happen with fake players if they get knocked back
+				if(serverPlayer.connection == null)
+					return;
+				
+				//Check if the network manager is null too, while we're at it.
+				if(serverPlayer.connection.getNetworkManager() == null)
+					return;
+				
+				PacketHandler.instance.sendTo(new MessageUpdateAttackYaw(player), serverPlayer.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+			}
 		}
 	}
 }
