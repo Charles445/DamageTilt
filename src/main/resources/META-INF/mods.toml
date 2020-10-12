@@ -4,7 +4,7 @@ license="MIT"
 
 [[mods]]
 modId="damagetilt"
-version="0.1.0"
+version="0.1.1"
 displayName="DamageTilt"
 authors="Charles445"
 description='''
