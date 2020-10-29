@@ -42,11 +42,9 @@ public class MessageUpdateAttackYaw implements IMessage
 		{
 			if(ctx.side == Side.CLIENT)
 			{
-				Minecraft.getMinecraft().addScheduledTask(() -> 
-				{
-					fromMessage(message);
-				});
+				Minecraft.getMinecraft().addScheduledTask(new RunnableMessage(message));
 			}
+			
 			return null;
 		}
 		
@@ -55,7 +53,24 @@ public class MessageUpdateAttackYaw implements IMessage
 		{
 			if (!ModConfig.damageTiltEnabled)
 				return;
-			Minecraft.getMinecraft().player.attackedAtYaw = message.attackedAtYaw;
+			Minecraft.getMinecraft().thePlayer.attackedAtYaw = message.attackedAtYaw;
+		}
+		
+		@SideOnly(Side.CLIENT)
+		public class RunnableMessage implements Runnable
+		{
+			MessageUpdateAttackYaw message;
+			
+			public RunnableMessage(MessageUpdateAttackYaw message)
+			{
+				this.message = message;
+			}
+			
+			@Override
+			public void run()
+			{
+				Handler.fromMessage(message);
+			}
 		}
 	}
 }

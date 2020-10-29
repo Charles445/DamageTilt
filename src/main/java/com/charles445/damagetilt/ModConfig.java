@@ -1,30 +1,38 @@
 package com.charles445.damagetilt;
 
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
 
-@Config(modid = DamageTilt.MODID)
+import net.minecraftforge.common.config.Configuration;
+
 public class ModConfig
 {
-	@Config.Comment("Whether the damage tilt effect is enabled")
-	@Config.Name("Damage Tilt Enabled")
+	@Nullable
+	public static Configuration config;
+	
 	public static boolean damageTiltEnabled = true;
 	
-	@Mod.EventBusSubscriber(modid = DamageTilt.MODID)
-	private static class EventHandler
+	public static void sync()
 	{
-		@SubscribeEvent
-		@SideOnly(Side.CLIENT)
-		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
+		if(config!=null)
 		{
-			if(event.getModID().equals(DamageTilt.MODID))
+			try
 			{
-				ConfigManager.sync(DamageTilt.MODID, Config.Type.INSTANCE);
+				config.load();
+				
+				damageTiltEnabled = config.get(
+						Configuration.CATEGORY_GENERAL,
+						"Damage Tilt Enabled",
+						"true",
+						"Whether the damage tilt effect is enabled")
+						.getBoolean();
+				
+				if(config.hasChanged())
+					config.save();
+			}
+			catch(Exception e)
+			{
+				System.out.println("DamageTilt config failed unexpectedly");
+				e.printStackTrace();
 			}
 		}
 	}
