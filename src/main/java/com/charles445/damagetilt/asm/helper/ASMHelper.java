@@ -3,18 +3,6 @@ package com.charles445.damagetilt.asm.helper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.commons.Remapper;
-import org.objectweb.asm.commons.RemappingMethodAdapter;
-import org.objectweb.asm.tree.*;
-import org.objectweb.asm.util.Printer;
-import org.objectweb.asm.util.Textifier;
-import org.objectweb.asm.util.TraceMethodVisitor;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -23,6 +11,23 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import net.minecraft.launchwrapper.LaunchClassLoader;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.commons.Remapper;
+import org.objectweb.asm.commons.RemappingMethodAdapter;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.util.Printer;
+import org.objectweb.asm.util.Textifier;
+import org.objectweb.asm.util.TraceMethodVisitor;
 
 /** 
  * From the very helpful ASMHelper pack
@@ -31,8 +36,32 @@ import java.util.Set;
  */
 public class ASMHelper
 {
+	private static Boolean isCauldron = null;
 	public static InsnComparator insnComparator = new InsnComparator();
 	private static final Multimap<String, String> interfaceLookupCache = HashMultimap.create();
+
+	/**
+	 * @return Whether or not Cauldron is loaded in the current environment.<br>
+	 * <br>
+	 * See: http://cauldron.minecraftforge.net/
+	 */
+	public static boolean isCauldron()
+	{
+		if (ASMHelper.isCauldron == null)
+		{
+			try
+			{
+				byte[] bytes = ((LaunchClassLoader) ASMHelper.class.getClassLoader()).getClassBytes("net.minecraftforge.cauldron.api.Cauldron");
+				ASMHelper.isCauldron = bytes != null;
+			}
+			catch (IOException e)
+			{
+				ASMHelper.isCauldron = false;
+			}
+		}
+
+		return ASMHelper.isCauldron;
+	}
 
 	/**
 	 * Converts a class name to an internal class name.

@@ -1,27 +1,29 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.8.9-0.1.0"
-group = "com.charles445.damagetilt" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+apply plugin: 'forge'
+
+version = "1.7.10-0.1.0"
+group= "com.charles445.damagetilt" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "DamageTilt"
 
 minecraft {
-    version = "1.8.9-11.15.1.2318-1.8.9"
-    runDir = "run"
-    
-    mappings = "stable_20"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    version = "1.7.10-10.13.2.1230"
+    runDir = "eclipse"
 }
 
 dependencies {

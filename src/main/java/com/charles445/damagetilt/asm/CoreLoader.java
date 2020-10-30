@@ -4,7 +4,8 @@ import java.util.Map;
 
 import com.charles445.damagetilt.asm.helper.ObfHelper;
 
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+
 
 @IFMLLoadingPlugin.Name("DamageTilt ASM")
 @IFMLLoadingPlugin.SortingIndex(1002)

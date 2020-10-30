@@ -1,13 +1,13 @@
 package com.charles445.damagetilt;
 
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MessageUpdateAttackYaw implements IMessage
 {
@@ -42,7 +42,7 @@ public class MessageUpdateAttackYaw implements IMessage
 		{
 			if(ctx.side == Side.CLIENT)
 			{
-				Minecraft.getMinecraft().addScheduledTask(new RunnableMessage(message));
+				Minecraft.getMinecraft().func_152344_a(new RunnableMessage(message));
 			}
 			
 			return null;

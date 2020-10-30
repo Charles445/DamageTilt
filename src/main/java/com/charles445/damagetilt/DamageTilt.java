@@ -1,16 +1,16 @@
 package com.charles445.damagetilt;
 
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod
 (
 	modid = DamageTilt.MODID,
 	name = DamageTilt.NAME,
 	version = DamageTilt.VERSION,
-	acceptedMinecraftVersions = "[1.8, 1.9)"
+	acceptedMinecraftVersions = "[1.7, 1.8)"
 )
 public class DamageTilt
 {
