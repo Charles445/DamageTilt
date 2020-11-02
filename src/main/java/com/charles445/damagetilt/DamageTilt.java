@@ -1,6 +1,5 @@
 package com.charles445.damagetilt;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -10,13 +9,14 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 	modid = DamageTilt.MODID,
 	name = DamageTilt.NAME,
 	version = DamageTilt.VERSION,
-	acceptedMinecraftVersions = "[1.8, 1.9)"
+	acceptedMinecraftVersions = "[1.8, 1.9)",
+	acceptableRemoteVersions = "*"
 )
 public class DamageTilt
 {
 	public static final String MODID = "damagetilt";
 	public static final String NAME = "Damage Tilt";
-	public static final String VERSION = "0.1.0";
+	public static final String VERSION = "0.2.0";
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
@@ -25,8 +25,5 @@ public class DamageTilt
 		
 		ModConfig.config = new Configuration(event.getSuggestedConfigurationFile());
 		ModConfig.sync();
-		
-		PacketHandler.init();
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 }
