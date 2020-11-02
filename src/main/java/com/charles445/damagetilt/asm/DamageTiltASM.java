@@ -17,35 +17,47 @@ public class DamageTiltASM implements IClassTransformer
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass)
 	{
-		if(transformedName.equals("net.minecraft.entity.EntityLivingBase"))
-			return transformEntityLivingBase(basicClass);
+		if(transformedName.equals("net.minecraft.entity.Entity"))
+		{
+			return transformEntity(basicClass);
+		}
 		
 		return basicClass;
 	}
 	
-	public byte[] transformEntityLivingBase(byte[] basicClass)
+	public byte[] transformEntity(byte[] basicClass)
 	{
-		ClassNode classNode = ASMHelper.readClassFromBytes(basicClass);
+		ClassNode cNode = ASMHelper.readClassFromBytes(basicClass);
 		
-		for(MethodNode mNode : classNode.methods)
+		//net.minecraft.entity.Entity
+		
+		for(MethodNode mNode : cNode.methods)
 		{
-			if(mNode.name.equals("func_70653_a") || mNode.name.equals("knockBack"))
+			if(mNode.name.equals("func_70016_h") || mNode.name.equals("setVelocity"))
 			{
-				System.out.println("DamageTilt Found matching method "+mNode.name);
-				if(mNode.desc.equals("(Lnet/minecraft/entity/Entity;FDD)V"))
+				//Matching name, verify correct desc
+				if(mNode.desc.equals("(DDD)V"))
 				{
-					System.out.println("DamageTilt Matching method has matching desc");
+					//Found a match
+					InsnList hook = new InsnList();
 					
-					InsnList list = new InsnList();
-					list.add(new VarInsnNode(Opcodes.ALOAD, 0)); //Push this to stack
-					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC,"com/charles445/damagetilt/EventHandler","onKnockback","(Lnet/minecraft/entity/EntityLivingBase;)V", false));
-					mNode.instructions.insertBefore(ASMHelper.findFirstInstruction(mNode), list);
+					hook.add(new VarInsnNode(Opcodes.ALOAD,0)); //push this to stack
+					hook.add(new VarInsnNode(Opcodes.DLOAD,1)); //push x to stack (increment 2 for doubles as param)
+					hook.add(new VarInsnNode(Opcodes.DLOAD,3)); //push y to stack
+					hook.add(new VarInsnNode(Opcodes.DLOAD,5)); //push z to stack
+					hook.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/charles445/damagetilt/HookEntity", "setVelocity", "(Lnet/minecraft/entity/Entity;DDD)V", false));
 					
-					System.out.println("DamageTilt Patched method "+mNode.name);
-					return ASMHelper.writeClassToBytes(classNode, ClassWriter.COMPUTE_MAXS);
+					//Add to method head
+					mNode.instructions.insertBefore(ASMHelper.findFirstInstruction(mNode), hook);
+					
+					System.out.println("Damage Tilt Patched net.minecraft.entity.Entity");
+					return ASMHelper.writeClassToBytes(cNode, ClassWriter.COMPUTE_MAXS);
 				}
+					
 			}
 		}
+		
+		System.out.println("Damage Tilt Skipping patch for net.minecraft.entity.Entity");
 		return basicClass;
 	}
 }
