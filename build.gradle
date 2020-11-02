@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.12.2-0.1.0"
+version = "1.12.2-0.2.0"
 group = "com.charles445.damagetilt" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "DamageTilt"
 
@@ -44,5 +44,13 @@ processResources {
         
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+jar {
+    manifest 
+	{
+        attributes "FMLCorePlugin": "com.charles445.damagetilt.asm.CoreLoader"
+		attributes "FMLCorePluginContainsFMLMod": "com.charles445.damagetilt.DamageTilt"
     }
 }
