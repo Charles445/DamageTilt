@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class KnockbackHandler
 {
@@ -13,7 +14,7 @@ public class KnockbackHandler
 		if(entity instanceof PlayerEntity)
 		{
 			PlayerEntity player = (PlayerEntity)entity;
-			if(!player.world.isClient)
+			if(!player.world.isClient && player instanceof ServerPlayerEntity)
 			{
 				//Server side, send packet
 				PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
