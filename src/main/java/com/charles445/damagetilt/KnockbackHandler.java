@@ -8,7 +8,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 public class KnockbackHandler
 {
-	public static void onKnockback(Object entity, float f, double d, double e)
+	public static void onKnockback(Object entity, double f, double d, double e)
 	{
 		if(entity instanceof PlayerEntity)
 		{

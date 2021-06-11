@@ -12,8 +12,8 @@ import net.minecraft.entity.LivingEntity;
 @Mixin(LivingEntity.class)
 public class KnockbackMixin
 {
-	@Inject(at = @At("HEAD"), method = "takeKnockback(FDD)V")
-	private void onKnockback(float f, double d, double e, CallbackInfo info)
+	@Inject(at = @At("HEAD"), method = "takeKnockback(DDD)V")
+	private void onKnockback(double f, double d, double e, CallbackInfo info)
 	{
 		KnockbackHandler.onKnockback(this, f, d, e);
 	}
