@@ -1,16 +1,17 @@
 package com.charles445.damagetilt;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
 
 public class EventHandler
 {
 	@SubscribeEvent
-	public void onModConfigEvent(ModConfig.ModConfigEvent event)
+	public void onModConfigEvent(ModConfigEvent event)
 	{
 		ModConfig config = event.getConfig();
 		
@@ -26,27 +27,28 @@ public class EventHandler
 		if(!TiltConfig.damageTiltEnabled)
 			return;
 		
-		if(event.getEntityLiving() instanceof PlayerEntity)
+		if(event.getEntityLiving() instanceof Player)
 		{
-			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-			if(player.world.isRemote)
+			Player player = (Player) event.getEntityLiving();
+			if(player.level.isClientSide)
 				return;
 			
 			//Server Side
 			
-			if(player instanceof ServerPlayerEntity)
+			if(player instanceof ServerPlayer)
 			{
-				ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
+				ServerPlayer serverPlayer = (ServerPlayer)player;
 				
 				//Check if the connection is null, which may happen with fake players if they get knocked back
+				//Forge 1.17 Addresses this which is cool, but I'm not taking any chances
 				if(serverPlayer.connection == null)
 					return;
 				
 				//Check if the network manager is null too, while we're at it.
-				if(serverPlayer.connection.getNetworkManager() == null)
+				if(serverPlayer.connection.connection == null) //Yo Dawg
 					return;
 				
-				PacketHandler.instance.sendTo(new MessageUpdateAttackYaw(player), serverPlayer.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+				PacketHandler.instance.sendTo(new MessageUpdateAttackYaw(player), serverPlayer.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 			}
 		}
 	}

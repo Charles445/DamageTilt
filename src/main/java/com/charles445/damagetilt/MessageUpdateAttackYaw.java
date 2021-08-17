@@ -3,12 +3,12 @@ package com.charles445.damagetilt;
 import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 public class MessageUpdateAttackYaw
 {
@@ -26,16 +26,16 @@ public class MessageUpdateAttackYaw
 	
 	public MessageUpdateAttackYaw(LivingEntity entity)
 	{
-		this.attackedAtYaw = entity.attackedAtYaw;
+		this.attackedAtYaw = entity.hurtDir;
 	}
 	
-	public static MessageUpdateAttackYaw encode(MessageUpdateAttackYaw message, PacketBuffer packet)
+	public static MessageUpdateAttackYaw encode(MessageUpdateAttackYaw message, FriendlyByteBuf packet)
 	{
 		packet.writeFloat(message.attackedAtYaw);
 		return message;
 	}
 	
-	public static MessageUpdateAttackYaw decode(PacketBuffer packet)
+	public static MessageUpdateAttackYaw decode(FriendlyByteBuf packet)
 	{
 		return new MessageUpdateAttackYaw(packet.readFloat());
 	}
@@ -46,7 +46,7 @@ public class MessageUpdateAttackYaw
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 		
-		Minecraft.getInstance().deferTask(() -> 
+		ctx.get().enqueueWork(() -> 
 		{
 			fromMessage(message);
 		});
@@ -57,6 +57,6 @@ public class MessageUpdateAttackYaw
 	{
 		if (!TiltConfig.damageTiltEnabled)
 			return;
-		Minecraft.getInstance().player.attackedAtYaw = message.attackedAtYaw;
+		Minecraft.getInstance().player.hurtDir = message.attackedAtYaw;
 	}
 }
