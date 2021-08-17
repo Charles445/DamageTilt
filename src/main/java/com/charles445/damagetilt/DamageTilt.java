@@ -10,7 +10,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 	name = DamageTilt.NAME,
 	version = DamageTilt.VERSION,
 	acceptedMinecraftVersions = "[1.8, 1.9)",
-	acceptableRemoteVersions = "*"
+	acceptableRemoteVersions = "*",
+	clientSideOnly = true
 )
 public class DamageTilt
 {
