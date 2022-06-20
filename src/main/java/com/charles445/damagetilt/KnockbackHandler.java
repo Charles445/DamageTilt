@@ -1,7 +1,7 @@
 package com.charles445.damagetilt;
 
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -19,7 +19,7 @@ public class KnockbackHandler
 				PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
 				data.writeFloat(YawUtil.getAttackedAtYaw(player));
 				
-				ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, DamageTilt.PLAY_YAW_PACKET_ID, data);
+				ServerPlayNetworking.send((ServerPlayerEntity) player, DamageTilt.PLAY_YAW_PACKET_ID, data);
 			}	
 		}
 	}
