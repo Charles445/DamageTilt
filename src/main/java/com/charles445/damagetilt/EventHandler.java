@@ -27,9 +27,9 @@ public class EventHandler
 		if(!TiltConfig.damageTiltEnabled)
 			return;
 		
-		if(event.getEntityLiving() instanceof Player)
+		if(event.getEntity() instanceof Player)
 		{
-			Player player = (Player) event.getEntityLiving();
+			Player player = (Player) event.getEntity();
 			if(player.level.isClientSide)
 				return;
 			
