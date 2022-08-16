@@ -14,7 +14,7 @@ Tilts the player's camera when they take damage
 [[dependencies.damagetilt]]
 modId="forge"
 mandatory=true
-versionRange="[41,)"
+versionRange="[41.0.94,)"
 ordering="NONE"
 side="BOTH"
    
